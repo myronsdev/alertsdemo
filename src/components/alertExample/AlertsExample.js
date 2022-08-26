@@ -5,17 +5,35 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import "./alertsExample.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { add, setAlertRemoval } from "../alertManager/alertsSlice";
 
 export function AlertsExample() {
   const dispatch = useDispatch();
-  const updatedAlerts = useSelector((state) => state.useAlertReducer.activeAlerts);
-  
+  const updatedAlerts = useSelector(
+    (state) => state.useAlertReducer.activeAlerts
+  );
+  let timerRef = useRef();
+
   useEffect(() => {
-    handleAlertRemoval();
-  });
+    const TEN_SECONDS = 10000;
+    const handleAlertRemoval = (id) => {
+      dispatch(setAlertRemoval(id));
+    };
+
+    const newAlert = updatedAlerts[updatedAlerts.length - 1]; /// get newly added alert
+    const timeLimit =
+      newAlert && newAlert.timeLimit ? newAlert.timeLimit * 1000 : TEN_SECONDS; // if no timelimit was provided, add default 10 sec
+
+    if (newAlert != null) {
+      timerRef.current = setTimeout(() => {
+        handleAlertRemoval(newAlert.id);
+      }, timeLimit);
+    }
+
+    return () => timerRef.current && clearTimeout(timerRef.current);
+  }, [updatedAlerts, dispatch]);
 
   const [timeLimit, setTimelimit] = useState(10);
   const [text, setText] = useState("");
@@ -23,19 +41,6 @@ export function AlertsExample() {
   const [alertType, setAlertType] = useState("success");
   const [id, setID] = useState("");
   const [alertTitle, setAlertTitle] = useState("");
-
-  const handleAlertRemoval = () => {
-    const TEN_SECONDS = 10000;
-
-    const newAlert = updatedAlerts[updatedAlerts.length - 1];  /// get newly added alert
-    const timeLimit = newAlert && newAlert.timeLimit ? newAlert.timeLimit *1000 : TEN_SECONDS; // if no timelimit was provided, add default 10 sec
-   
-    if (newAlert !== undefined) {
-      setTimeout(() => {
-        dispatch(setAlertRemoval(newAlert.id));
-      }, timeLimit);
-    }
-  };
 
   const handleSubmission = (event) => {
     dispatch(
