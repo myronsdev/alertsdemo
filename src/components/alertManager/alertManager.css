@@ -1,0 +1,8 @@
+.Alert-manager {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  padding: 16px;
+  width: 500px;
+  max-width: 90%;
+}

@@ -1,0 +1,12 @@
+.disabled-link {
+  cursor: default;
+}
+
+.alert-link {
+  text-decoration: none !important;
+}
+
+.MuiPaper-root {
+  text-align: left;
+  margin-bottom: 16px;
+}

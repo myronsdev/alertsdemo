@@ -1,0 +1,18 @@
+.Alerts-example {
+  height: 100%;
+  display: flex;
+  padding: 16px;
+}
+
+.Radio-group {
+  margin-bottom: 16px
+}
+
+
+.Form-label {
+  margin-top: 16px;
+}
+
+.Button {
+  margin-top: 16px;
+}
